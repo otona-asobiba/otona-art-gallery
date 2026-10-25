@@ -24,7 +24,7 @@ body{background:#f5f0e7;background-image:radial-gradient(#947b5b14 .7px,transpar
 .visitor-write button{margin-top:8px;justify-self:start}
 .visitor-write button:disabled{opacity:.55;cursor:not-allowed}
 .visitor-write .small{line-height:1.65}
-</style><meta name="gallery-build" content="all-29-portraits-fixed-20261024"></head><body><header><div class="top"><div><p>大人の遊び場 presents</p><h1>襟足のダンス</h1><p>スタバのお姉さんお客さんで来てる時はわりきってる</p></div><div class="stamp">NO GENIUS.<br><b>NO RULES.</b></div></div></header><main class="wrap"><section class="eventbar"><div><div class="eyebrow">CURRENT EXHIBITION · 大人の遊び場</div><h2 id="eventName">展覧会名を設定してください</h2><p id="eventTheme">テーマを設定してください</p><p id="eventPeriod" class="small"></p></div><div class="event-actions"><button class="btn secondary" id="editEvent">⚙ 展覧会を設定</button><button class="btn ghost" id="openTicket">🎟 入場チケット</button></div></section><section class="intro"><div><h2>本日の展示作品 <span id="count" class="pill">0点</span></h2><p>あなたの作品を飾ろう。やたら語るおっさんも、買い物帰りのオバハンも、勝手にやってくる。</p></div><button class="btn" id="openUpload">＋ 作品を展示する</button></section><section id="gallery" class="gallery"></section><section class="side"><h2>本日の勝手な鑑賞者たち</h2><p class="small">買い物帰りの人も、妙に語りたがる人も、なぜかここに集まってくる。</p><div class="visitor-list" id="visitors"></div><div class="notice">🎭 <b>みんなの共同展示室。</b> 作品は全員で共有されています。架空の来館者は10分ごとに自動で現れ、いつ誰が来るかはお楽しみ。テリー片桐のスカウトも予告なしのフィクションイベントです。実際のAI作品審査や業界からの勧誘ではありません。参加者自身も作品へコメントできます。</div></section></main>
+</style><meta name="gallery-build" content="persona-art-aware-comments-v9-20261025"></head><body><header><div class="top"><div><p>大人の遊び場 presents</p><h1>襟足のダンス</h1><p>スタバのお姉さんお客さんで来てる時はわりきってる</p></div><div class="stamp">NO GENIUS.<br><b>NO RULES.</b></div></div></header><main class="wrap"><section class="eventbar"><div><div class="eyebrow">CURRENT EXHIBITION · 大人の遊び場</div><h2 id="eventName">展覧会名を設定してください</h2><p id="eventTheme">テーマを設定してください</p><p id="eventPeriod" class="small"></p></div><div class="event-actions"><button class="btn secondary" id="editEvent">⚙ 展覧会を設定</button><button class="btn ghost" id="openTicket">🎟 入場チケット</button></div></section><section class="intro"><div><h2>本日の展示作品 <span id="count" class="pill">0点</span></h2><p>あなたの作品を飾ろう。やたら語るおっさんも、買い物帰りのオバハンも、勝手にやってくる。</p></div><button class="btn" id="openUpload">＋ 作品を展示する</button></section><section id="gallery" class="gallery"></section><section class="side"><h2>本日の勝手な鑑賞者たち</h2><p class="small">買い物帰りの人も、妙に語りたがる人も、なぜかここに集まってくる。</p><div class="visitor-list" id="visitors"></div><div class="notice">🎭 <b>みんなの共同展示室。</b> 作品は全員で共有されています。架空の来館者は10分ごとに自動で現れ、作品名・紹介文や画像の色の印象をヒントに、それぞれの口調で感想を残します。誰が来るかはお楽しみ。テリー片桐のスカウトも予告なしのフィクションイベントです。実際のAI作品審査や業界からの勧誘ではありません。参加者自身も作品へコメントできます。</div></section></main>
 <dialog id="uploadDialog"><div class="modal-head"><h2>作品を展示する</h2><button class="x" data-close="uploadDialog" aria-label="閉じる">×</button></div><div class="modal-body"><div class="field"><label>作品画像</label><div class="upload" id="uploadZone">🖼️<br>ここをタップして画像を選択<br><small>JPEG / PNG / WebP</small><img id="uploadPreview" alt="作品プレビュー"></div><input id="file" type="file" accept="image/*" hidden></div><div class="field"><label for="title">作品名</label><input id="title" maxlength="45" placeholder="例：ザビエル、富士山に立つ"></div><div class="field"><label for="artist">作者名（ニックネーム）</label><input id="artist" maxlength="30" placeholder="例：けんいち"></div><div class="field"><label for="desc">作品のひとこと（任意）</label><textarea id="desc" maxlength="200" placeholder="制作秘話、見どころなど"></textarea></div><button class="btn" id="submitWork">美術館に展示する</button><p class="small">投稿画像は共有展示室に保存され、URLを知る全員に公開されます。</p></div></dialog>
 <dialog id="detailDialog"><div class="modal-head"><h2>作品鑑賞室</h2><button class="x" data-close="detailDialog" aria-label="閉じる">×</button></div><div class="modal-body" id="detailBody"></div></dialog>
 
@@ -71,6 +71,7 @@ async function loadSharedWorks(){
       humanCommentsReady=true;
     }
     render();
+    void refreshArtColors();
     document.getElementById('sharedStatus').textContent='共有展示室に接続中 · '+works.length+'作品 · 10分ごとに来館';
   }catch(e){
     document.getElementById('sharedStatus').textContent='共有作品を読み込めません。通信状況をご確認ください';
@@ -78,6 +79,484 @@ async function loadSharedWorks(){
   }
 }
 let imageData='';const $=id=>document.getElementById(id);const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const pick=(arr,seed)=>arr[Math.abs(seed)%arr.length];const hash=s=>{let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h)};const store=()=>true;
+// Fictional visitor comment engine v9: title / artist note / image palette aware.
+// Entirely in-browser: no remote generative AI and no new database tables.
+const ROLE_VOICES = {
+ '三田村': [
+  '「{title}」という題名が、{subject}の見え方まで決めてしまう。その危うさが面白いですね。',
+  '{color}と{composition}の関係、ここが議論の入口でしょう。何を意味するかはまだ言いません。',
+  '{subject}を選んだ必然性を作者に尋ねたい。答えが簡単だったら少し困りますが。',
+  '最初は{color}に目が行きましたが、見直すと{subject}のほうが厄介ですね。',
+  'この{contrast}は、見る側の解釈を少し強引に引っ張ります。私は嫌いじゃない。',
+  '「{title}」を別の名前で展示したら、まったく違う作品に見えるでしょうね。',
+  '{detail}という手がかりを踏まえても、まだ読み切れない部分が残っている。そこがいい。',
+  '{composition}が意外と効いている。私はここを見落としたくないですね。',
+  '{subject}を正面から説明しないところに、作者の少し厄介な自信を感じます。'
+ ],
+ 'KENZO': [
+  '「{title}」、海外向けならこのままの題名で行きたいね。僕のロンドンの知人にも刺さりそう。',
+  '{color}は海外の展示でも映えそう。あ、まだ具体的な会場は決まってないけど。',
+  '{subject}をこの切り口で見せるんだ。ベルリンの誰かに連絡したくなるな。',
+  '{contrast}が強いね。プロモーション映像にしたい。予算はあとで考えよう。',
+  'これ、展示の一枚目に置きたいよ。最初に「{title}」って聞かせるだけで話が始まる。',
+  '{detail}という発想、グローバルだと思う。何をもってグローバルかは説明が難しいけど。',
+  '{composition}を見て、僕は都市の広告を思い出した。国は忘れた。',
+  'この{color}、ロゴに転用したら強いよね。まだ何のブランドか決めてないけど。',
+  '「{title}」で短編映像を一本作れそう。主演は作品そのもの。たぶん。'
+ ],
+ '野口': [
+  '{contrast}の付き方が面白いね。写真なら露出をどうするか悩むところです。',
+  'この{color}、昔のフィルムなら再現が難しかったかもしれませんな。',
+  '{composition}がいい。写真じゃないとしても、画面の取り方にはつい目が行く。',
+  '「{title}」は二度目に見たほうが効きますね。最初と印象が変わった。',
+  '{subject}の扱い方に、撮影場所を探していた頃の感覚を思い出しました。',
+  'こういう{contrast}を見ると、プリントして壁に掛けたくなりますな。',
+  '{detail}という説明を先に読むべきか、見終わってから読むべきか迷います。',
+  '色を少し抑えても成立しそう。でもこの{color}が作者の答えなのかもしれません。',
+  '目が止まるのは{composition}ですね。技術より視線の動きが先に来る。'
+ ],
+ '京子': [
+  '「{title}」やって。名前からして気になるわ。うちの姉ちゃんに見せたい。',
+  'この{color}、台所にある布にちょっと似てる。似てへんかな。',
+  '{subject}って、こんな見せ方できるんやな。ちょっと笑ってもうた。',
+  '{composition}がええな。玄関に飾るには大きさ次第やけど。',
+  '{contrast}がはっきりしてるから、遠くから見ても気づきそうやね。',
+  '帰りに買い物せなあかんのに、「{title}」でもう一回足止まったわ。',
+  '{detail}っていう話を聞くと、急に気になる部分が増えるなあ。',
+  '私は理屈は分からんけど、{color}に目が行くわ。好きやで。',
+  '{subject}の取り合わせ、家族に説明したら絶対「なんで？」って言われるな。'
+ ],
+ '月岡': [
+  '「{title}」という言葉が、絵の外から小さな雨のように降ってきます。',
+  '{color}は夕方の返事に似ている。まだ誰も問いかけていないのに。',
+  '{subject}がここにあるだけで、昨日の午後の形が変わった気がします。',
+  'この{contrast}には、言いそびれた一行が隠れているようです。',
+  '{composition}を追ううち、歩く速度だけが少し遅くなりました。',
+  '「{title}」。短い詩にするなら、この題名を最後の一行に置きたい。',
+  '{detail}という手がかりは、まだ温かい手紙の端みたいですね。',
+  '{color}が目に残ります。窓を開けたまま眠った朝のように。',
+  '目の前の{subject}を見ていたはずが、なぜか別の日を思い出しました。'
+ ],
+ '田所': [
+  '「{title}」という作品名、台帳に書くとき改行せずに済みそうですね。',
+  '{composition}は整理されているようで、よく見ると例外がありますね。',
+  'この{color}、展示の管理番号の色分けにも使えると思います。',
+  '{subject}の位置づけが気になります。備品なら勘定科目を確認したい。',
+  '{contrast}がはっきりしているので、資料に印刷しても見やすいかもしれません。',
+  '{detail}という説明、私は箇条書きにしたくなります。職業病ですね。',
+  '作品の評価とは別に、「{title}」の保管方法を聞いておきたいです。',
+  'ここだけの話、{composition}には妙な規則性があるように見えます。',
+  '「{title}」を見積書に載せるなら、摘要欄がちょっと難しい。'
+ ],
+ '片桐': [
+  '{subject}の扱い、ピカソが見たらどう言ったかな。私の勝手な想像ですけど。',
+  '「{title}」ね。これ、パリの美術館で見た作品と通じるものがある。入口だけですけど。',
+  '{composition}を壊す勇気、これが大事なんです。壊してないかもしれませんが。',
+  '{color}の大胆さがいい。私がキュビズムを語るときの熱量に近い。',
+  '{contrast}の裏には、作者の反骨精神がある気がします。本人に確認はしてない。',
+  '{detail}と聞くと、なおさら巨匠の初期作品を思い出します。作品名は出てこない。',
+  '「{title}」。私はこの題名をしばらく黙って味わいたい。珍しく。',
+  '{subject}をひとつの視点に閉じ込めない。その精神だけは確実に伝わります。',
+  'ここは{composition}が主役でしょう。私の美術談義は脇役でいい。たまには。'
+ ],
+ '坂本': [
+  '{composition}、これ実物で作ったら下地が大変やろな。仕事の目で見てまうわ。',
+  'この{color}、店舗の壁に使ったら意外とええかもしれん。',
+  '{subject}の置き方が気になるねん。どこで支える設計なんやろ。',
+  '「{title}」か。名前よりまず施工方法を考えてしもた。',
+  '{contrast}が強いと照明計画が楽しい。現場に持っていきたいな。',
+  '{detail}って説明、職人に伝えるときはどう言えばええやろ。',
+  'これ、材質は何なんやろな。{color}を見てたら塗装のこと考えてもうた。',
+  '{composition}に無茶があるようで、ちゃんとまとまってるんが面白い。',
+  '{subject}を現場で再現しろ言われたら、先に見積もり出すわ。'
+ ],
+ '白鳥': [
+  '「{title}」は題名を読んだあと、もう一度見返したくなる作品ですね。',
+  '{subject}と{composition}の関係が、展示順を考える上で気になります。',
+  'この{color}なら、隣の作品との距離を少し広めに取りたいですね。',
+  '{contrast}を生かすなら、照明は控えめでもいいかもしれません。',
+  '{detail}という情報は、作品ラベルにどこまで載せるか悩みどころです。',
+  '鑑賞者が最初に{subject}へ目を向けるかどうか、横で観察したいです。',
+  '{composition}が思った以上に効いています。展示会場の壁色も選びたい。',
+  '「{title}」の前には少し広い立ち止まる場所がほしいですね。',
+  '解説を増やすより、まずこの{color}を見てもらうのがよさそう。'
+ ],
+ '福本': [
+  '「{title}」か。昨日来たときと違うもん置いてると思うたわ。',
+  'この{color}、近所の看板に似てる気がする。どこの店やったかな。',
+  '{subject}かぁ。わしはよう分からんけど、ちょっと見てまうな。',
+  '{composition}を眺めとったら、座るタイミング逃したわ。椅子ある？',
+  '{contrast}のとこ、目ぇ行くわ。ほなもう一周して帰る。',
+  '「{title}」って何のことやろ。帰ってから考えるほどでもないけど気になる。',
+  '{detail}やて。ほう。作った人に話聞いたら面白そうやな。',
+  'この{color}、遠くからでもよう見えるで。',
+  '{subject}のことは置いといて、今日はこれ見て帰ろ。'
+ ],
+ '黒川': [
+  '「{title}」とは、題名でありながら題名を拒否する装置なのでしょう。おそらく。',
+  '{subject}の存在は、この{composition}の不在をかえって強調している。',
+  '{color}を色彩として捉える時点で、我々はすでに後手に回っています。',
+  '{contrast}の狭間に立たされる鑑賞者。そこに現代的な問題があります。',
+  '{detail}という記述を読んで、あえて読まなかった場合を考えています。',
+  'ここでいう{subject}は、私たちが知っているそれと同じなのでしょうか。',
+  'この{composition}は、分かることへの抵抗そのものに見えますね。',
+  '「{title}」の意味を確定させることこそ、最も慎重であるべきです。',
+  '{color}が強く主張しているようで、実は静かに退いている。逆説です。'
+ ],
+ '節子': [
+  '「{title}」、レジ打ちながらこんな名前思いつかへんわ。面白いなあ。',
+  'この{color}、うちの店のカップと合わせたらかわいいかも。',
+  '{subject}って、見てたら休憩時間があっという間に終わりそう。',
+  '{composition}が好き。コーヒー飲みながらゆっくり見たいです。',
+  '{contrast}がはっきりしてるから、店内の端っこに置いても目立ちそう。',
+  '{detail}という話を聞いて、見るところが変わりました。',
+  '「{title}」ってメニュー名にしたら、注文する人どんな顔するやろ。',
+  'この{color}、朝と夜で印象変わりそうですね。',
+  '{subject}にちょっと親しみが湧きます。理由はまだうまく言えないけど。'
+ ],
+ '大門': [
+  '「{title}」という名前、ブランドとしての伸びしろを感じるね。値段は知らないけど。',
+  'この{color}、商品のパッケージなら目立つでしょうね。',
+  '{subject}を軸にした市場があるかどうか、ちょっと気になります。',
+  '{composition}は競合との差別化になりそうです。競合が何かは不明。',
+  '{contrast}、これは数字にしづらい。だから面白いのかもしれない。',
+  '{detail}という説明、投資家向け資料に入れたら質問が増えそうです。',
+  '「{title}」を持っているだけで話題になるなら、資産価値はありますね。',
+  '{subject}の意外性に、つい先行者利益という言葉を使いたくなる。',
+  'この{color}はリスクもある。でも私はそういうところも見たい。'
+ ],
+ '福田': [
+  '「{title}」か。これ、うちの店の壁に貼ったら常連が何て言うかな。',
+  'この{color}、酒の肴にはならんけど会話のきっかけにはなるな。',
+  '{subject}って聞いて、うちの客の顔が何人か浮かんだわ。',
+  '{composition}、ええな。最初の一杯が出るまで眺めてたい。',
+  '{contrast}が効いてる。派手すぎへんかって？ うちの店よりましや。',
+  '{detail}なんて説明されたら、カウンターで一時間語る客が出てくるで。',
+  '「{title}」って名前のつまみを出したら、注文されるやろか。',
+  'この{color}、夜の照明で見たらまた変わるんやろな。',
+  '{subject}を見ながら「もう一杯だけ」って言う客がいそうや。'
+ ],
+ '博士': [
+  '「{title}」という命名には、どこか儀礼的な響きがありますね。',
+  '{subject}をどんな文化の文脈で読むかによって、反応が変わりそうです。',
+  '{color}の選び方が、共同体の記号のようにも見える。仮説ですが。',
+  '{composition}は、知らない土地の祭りの配置にも似ている気がします。',
+  '{contrast}が目立つ理由を、私は社会的に解釈してしまいます。',
+  '{detail}という説明は、非常に面白い観察記録ですね。',
+  '「{title}」を別の国の人に見せたら、どんな物語を作るんでしょう。',
+  '{subject}から日常の習慣を連想するのは、研究の癖かもしれません。',
+  'この{color}は、儀礼の衣装の話にもつながりそう。私の想像ですけど。'
+ ],
+ '森田': [
+  '「{title}」。覚えました。巡回中にまた見ます。',
+  '{color}、目立ちますね。',
+  '{subject}。なるほど。異常なしです。',
+  '{composition}が気になって、いつもより立ち止まりました。',
+  '{contrast}。遠くからも確認できます。',
+  '{detail}という説明、読みました。了解です。',
+  '「{title}」の前、人が止まりそうですね。',
+  'この{color}なら、照明が落ちても見失いにくいかもしれません。',
+  '{subject}の見せ方、悪くないです。以上。'
+ ],
+ '長谷川': [
+  '「{title}」……題名だけでもう胸がいっぱいです。',
+  'この{color}がねえ、なんだか昔の景色を連れてくるんですよ。',
+  '{subject}をこう見せられると、長く生きててもまだ驚きがありますね。',
+  '{composition}がすばらしい。細かい理屈は私には分かりませんが。',
+  '{contrast}を眺めてたら、思わず目頭が熱くなりました。',
+  '{detail}というお話、作者さんの気持ちを考えると泣けてきます。',
+  '「{title}」って、帰り道に何度も思い出しそうな名前ですねえ。',
+  'この{color}の中に、懐かしいものを勝手に探してしまいました。',
+  '{subject}のこと、孫にも見せたいなあ。きっと違う感想でしょうけど。'
+ ],
+ '宮本': [
+  '「{title}」の文字数、偶然にしては意味深ですね。私は数えてしまった。',
+  '{subject}は何かの暗号かもしれません。まず配置を確認しましょう。',
+  'この{color}、色の順番を変えたらメッセージになりそうです。',
+  '{composition}を追っていたら、隠し文字がある気がしてきました。ないかも。',
+  '{contrast}が境界線のように見える。ここに鍵がありますね。',
+  '{detail}という手がかり、暗号解読には重要かもしれません。',
+  '「{title}」を逆から読んでみたけど、まだ答えは出ていません。',
+  '{subject}の位置に規則を探すのは、もう病気みたいなものです。',
+  'この{color}を数字に変換したら……すみません、独り言です。'
+ ],
+ '宇田川': [
+  '「{title}」は作品の名前であり、作品から漏れ出した別の作品ですね。',
+  '{subject}を収集するとしたら、私はどこまでを一個と数えるべきでしょう。',
+  '{color}だけ切り出しても展示が成立しそう。存在の話です。',
+  '{composition}は、入口が出口のふりをしている配置ですね。',
+  'この{contrast}、概念的にはかなり湿っています。比喩ですよ。',
+  '{detail}という説明さえ、もう一つの作品として収蔵したい。',
+  '「{title}」という名前の空白を瓶に詰めて持ち帰りたいです。',
+  '{subject}があるというより、そこにあることを要求している感じ。',
+  'この{color}を見たあと、他の色が少し気まずそうに見えます。'
+ ],
+ '横山': [
+  '「{title}」を昼休みに見てしまって、午後の会議に少し遅れそうです。',
+  'この{color}、仕事用PCの壁紙なら気分が変わりそう。',
+  '{subject}がこんな風になるんだ。資料作りより面白いです。',
+  '{composition}がいいですね。整ってそうで整いすぎてない。',
+  '{contrast}が強いから、プレゼン資料の一枚目に置きたいな。',
+  '{detail}という説明、社内で話したら「結論は？」って言われそう。',
+  '「{title}」という名前で新規企画を出したら、上司は困るだろうな。',
+  'この{color}、金曜の夕方に見るのがちょうどよさそう。',
+  '{subject}をじっと見てたら、メールの返信を忘れてました。'
+ ],
+ 'あや': [
+  '「{title}」って名前、すごく残る。友だちに送りたい。',
+  'この{color}、スマホの画面でもめっちゃ映えそう。',
+  '{subject}の見せ方が予想外。ちょっとスクショ撮りたくなる。',
+  '{composition}、見れば見るほど好きになるタイプかも。',
+  '{contrast}のところ、最初に目が行った。これは強い。',
+  '{detail}って聞いてからもう一回見たら、印象全然違う！',
+  '「{title}」の文字だけでプレイリスト作れそう。',
+  'この{color}、なんかずっと見てられるな。',
+  '{subject}を自分の部屋に置いたらどうなるか考えちゃった。'
+ ],
+ '平野': [
+  '「{title}」という題名、授業の最初に黒板に書いてみたいですね。',
+  '{subject}について子どもたちに質問したら、意外な答えが返ってきそう。',
+  'この{color}をどう感じたか、正解なしで聞いてみたいです。',
+  '{composition}には、観察する楽しさがありますね。',
+  '{contrast}を見つける子と、題名から入る子で意見が分かれそうです。',
+  '{detail}という説明は、授業の最後に紹介したい気もします。',
+  '「{title}」という作品を見て「何が見える？」と聞いてみたいです。',
+  'この{color}には、言葉にする練習の題材がたくさんあります。',
+  '{subject}をめぐって、みんなの見方が違うのが面白いでしょうね。'
+ ],
+ '木下': [
+  '「{title}」を見て、また知らない街に行きたくなりました。',
+  'この{color}、旅先で撮った夕方の写真を思い出すなあ。',
+  '{subject}に見覚えがある気がする。どこだったかな、旅の途中かも。',
+  '{composition}がいいね。少し道に迷ってるような感じがする。',
+  '{contrast}を見てたら、駅のホームの光を思い出した。',
+  '{detail}って聞くと、作品に地図をつけたくなります。',
+  '「{title}」って名前の駅があったら、降りてみたい。',
+  'この{color}、朝見るのと夜見るので旅先が変わりそう。',
+  '{subject}を見ているうちに、次の旅行の行き先を考えてました。'
+ ],
+ 'チェコ': [
+  '「{title}」って面白い名前やね。家族にどう説明しよう。',
+  'この{color}、カーテンにしたら落ち着くかな。ちょっと派手かな。',
+  '{subject}が気になるわ。台所に立ちながら思い出しそう。',
+  '{composition}、不思議やけどなんか整って見える。',
+  '{contrast}がきれいやね。写真に撮って見せたくなる。',
+  '{detail}って話、晩ごはんのときに家族にしてみよ。',
+  '「{title}」を冷蔵庫に貼ったら、一日何回も見てまうな。',
+  'この{color}、うちの食器とは合わんかも。でも好き。',
+  '{subject}の発想、子どもが見たらもっと面白いこと言いそう。'
+ ],
+ 'リョウタ': [
+  '「{title}」、タイトルからして何かやってくれそうっすね。',
+  'この{color}、服のグラフィックにしたらよくないっすか。',
+  '{subject}の感じ、普通にかっこいいっす。説明は難しいけど。',
+  '{composition}、ちょっとクセ強いのがいいっすね。',
+  '{contrast}が目立つ！ ここ、まず見ました。',
+  '{detail}って言われてから見ると、なんか急に奥深いっす。',
+  '「{title}」ってバンド名みたい。違うかな。',
+  'この{color}、ライブのフライヤーにも似合いそう。',
+  '{subject}、自分だったら絶対こうは作れないっす。'
+ ],
+ 'タカシ': [
+  '「{title}」をサウナ後に見たら、もっとじんわり来そう。',
+  'この{color}、熱い部屋から水風呂に入ったときの感じがする。',
+  '{subject}のバランス、なんかととのうね。言葉は便利だな。',
+  '{composition}を目で追ってたら、呼吸がゆっくりになってきた。',
+  '{contrast}があるのに不思議と落ち着く。水風呂の後みたい。',
+  '{detail}っていう説明、サウナ室で誰かと話したら長引きそう。',
+  '「{title}」……これ、サウナの名前だったら入りたくなる。',
+  'この{color}を見たあと、外気浴したくなりました。',
+  '{subject}の見せ方、サウナでぼーっとしてるときの発想っぽい。'
+ ],
+ '米酢健二': [
+  '「{title}」をサビに置いたら、曲の景色が一気に変わる気がする。',
+  'この{color}は、ピアノの最後の一音みたいに残るんです。',
+  '{subject}を見たら、まだ名前を付けていないメロディーが浮かびました。',
+  '{composition}は、間奏の途中で急にドラムが止まる感じ。',
+  '{contrast}が音の強弱みたいで、少し悔しいくらいです。',
+  '{detail}って聞いてから、曲の歌詞を一行消したくなりました。',
+  '「{title}」という言葉だけで、一曲ぶん悩めそうです。',
+  'この{color}、朝じゃなくて夜に録音した音だと思う。感覚だけど。',
+  '{subject}のことを歌うなら、直接その名前は出さないかもしれない。'
+ ],
+ 'テリー片桐': [
+  '「{title}」、この名前でもう会議室がざわつくよ。僕がまずざわつかせる。',
+  'この{color}、ポスターにしたら目立つ！ あとはスポンサーだね。',
+  '{subject}をこう料理するの？ いいねぇ、業界の人に見せたいな。',
+  '{composition}を見て、来月の新企画が浮かんだ。まだ企画書はない。',
+  '{contrast}が強いね。これ、深夜番組のオープニングに合うよ。',
+  '{detail}って聞いたら、急にプロデューサーの顔が浮かんだ。名前は思い出せない。',
+  '「{title}」の作家さん、名刺ある？ 僕は今日は忘れちゃったんだけど。',
+  'この{color}、イベント会場で映えるよ。会場は今から探す。',
+  '{subject}の切り口、面白い。スカウトの話はまだ秘密ね。'
+ ],
+ 'ケニー・ザ・サンシャイン': [
+  '「{title}」、いい作品ですね。鑑賞時間が長い人向けの割引、あります？',
+  'この{color}、有料展示のクオリティですよ。ところで入場料って本当に無料？',
+  '{subject}が気に入りました。感想を三つ言ったら次回の特典つきません？',
+  '{composition}まで凝ってる。これは何回も来たい。回数券はありますか？',
+  '{contrast}がすごいな。長く見たんで滞在時間ポイントが欲しいです。',
+  '{detail}って話を聞けて得した気分。文字通りお得な企画はあります？',
+  '「{title}」を友達に紹介したい。紹介者特典は現金以外でも大丈夫です。',
+  'この{color}だけで元が取れた気がします。入場無料なんだけどね。',
+  '{subject}の発想、すごい。グループ観覧だと何人から割引ですか？'
+ ]
+};
+
+// Exact keywords from user-supplied title/description only. Never pretend to recognize an object from pixels.
+const ART_MOTIFS = [
+ '富士山','サウナ','コーヒー','やかん','ザビエル','ロボット','宇宙','電車','自転車','飛行機','ビル','建物',
+ '街','城','地球','海','波','川','湖','水','山','森','木','竹','鳥','猫','犬','馬','魚','虫',
+ '花','草','雪','雨','雲','空','太陽','月','星','夜','朝','夕日','光','影','炎','火','石',
+ '顔','目','手','人','こども','子ども','老人','女性','男性','家族','友達','車','道','旅',
+ '時計','窓','扉','ドア','椅子','机','本','紙','文字','看板','電話','スマホ','写真',
+ '鍋','やかん','料理','ご飯','パン','ラーメン','ケーキ','お菓子','果物','野菜','お茶',
+ '服','音楽','踊り','ダンス','映画','ゲーム','絵','コラージュ','夢','記憶','孤独',
+ '不安','愛','未来','過去','時間','乾き','乾燥','湿度','奇妙','違和感','自由','沈黙'
+];
+function shortArtText(s,n=42){
+ const a=Array.from(String(s||'').trim().replace(/\s+/g,' '));
+ return a.length<=n?a.join(''):a.slice(0,n).join('')+'…';
+}
+function artContext(w){
+ const title=shortArtText(w.title||'無題',44);
+ const description=shortArtText(w.desc||'',42);
+ const source=(w.title||'')+'。'+(w.desc||'');
+ const motifs=ART_MOTIFS.map(term=>({term,
+  titleAt:String(w.title||'').indexOf(term),
+  descAt:String(w.desc||'').indexOf(term)
+ })).filter(item=>item.titleAt>=0||item.descAt>=0)
+  .sort((a,b)=>{
+   const x=a.titleAt>=0?0:1,y=b.titleAt>=0?0:1;
+   return x-y||(x===0?a.titleAt-b.titleAt:a.descAt-b.descAt)||b.term.length-a.term.length;
+  });
+ // Prefer nouns in the artwork title; avoid extracting 山 from 富士山.
+ const chosen=[];
+ for(const item of motifs){
+  const motif=item.term;
+  if(chosen.some(k=>k.includes(motif)||motif.includes(k)))continue;
+  if(chosen.length>=3)break;
+  chosen.push(motif);
+ }
+ const subject=chosen.length>=2 ? '「'+chosen[0]+'」と「'+chosen[1]+'」の組み合わせ'
+  :chosen.length===1 ? '「'+chosen[0]+'」というモチーフ'
+  :'「'+title+'」という題名';
+ const visual=w.visual||{};
+ return {
+  title,subject,
+  color:visual.color||'色の重なり方',
+  contrast:visual.contrast||'明暗のつけ方',
+  composition:visual.composition||'要素の配置',
+  detail:description? '「'+description+'」' : subject,
+ };
+}
+function renderVoice(tpl,ctx){
+ return tpl.replace(/\{(title|subject|color|contrast|composition|detail)\}/g,(_,key)=>ctx[key]);
+}
+function voiceComment(w,person,eventId,used){
+ const ctx=w.commentContext||(w.commentContext=artContext(w));
+ const templates=ROLE_VOICES[person.name]||[
+  '「{title}」って、ちょっと引っかかる名前ですね。',
+  '{subject}の見せ方が面白いですね。',
+  'この{color}、なんだか印象に残ります。',
+  'もう一回見ると、{composition}の印象が変わりました。'
+ ];
+ const start=hash('voice:v9:'+w.id+':'+person.name+':'+eventId)%templates.length;
+ const taken=used||new Set();
+ for(let offset=0;offset<templates.length;offset++){
+  const text=renderVoice(templates[(start+offset)%templates.length],ctx);
+  if(!taken.has(text)) {taken.add(text);return text;}
+ }
+ // A rare repeat only after all character-specific alternatives were exhausted.
+ const ending=[
+  '帰る前に、もう一回見ておこう。','今度は少し離れて眺めよう。',
+  'さっきと違うところが気になった。','あと一度だけ見て帰ろう。',
+  'この題名、あとで誰かに話してみたい。','眺める場所を変えたら印象も変わりそう。',
+  'こういう発想は毎日見つかるものじゃない。','見るたび別の話が始まりそう。',
+  '今日は前より気になるところが増えた。','すぐ答えを出さずにいたい。',
+  '作った人にも一度聞いてみたいな。','この感じは意外と忘れられない。',
+  'また時間のあるときに見に来よう。','前に見たときと自分の感想が違う。',
+  '誰かと一緒に見てみるのも面白そう。','もう少しゆっくり歩いて帰ろう。'
+ ];
+ for(let j=0;j<templates.length;j++){
+  const line=renderVoice(templates[(start+j)%templates.length],ctx);
+  for(let i=0;i<ending.length;i++){
+   const result=line+' '+ending[(i+hash(eventId))%ending.length];
+   if(!taken.has(result)){taken.add(result);return result;}
+  }
+ }
+ return renderVoice(templates[start],ctx)+' また見に来てしまった。';
+}
+
+// Optional lightweight client-side color observation (not object recognition).
+// This enhances comments for public artwork images if their server supports CORS.
+const visualPromiseCache=new Map();
+function analyzeImagePalette(imageUrl){
+ if(visualPromiseCache.has(imageUrl))return visualPromiseCache.get(imageUrl);
+ const promise=new Promise(resolve=>{
+  const img=new Image();img.crossOrigin='anonymous';
+  const timeout=setTimeout(()=>resolve(null),5500);
+  img.onload=()=>{
+   clearTimeout(timeout);
+   try{
+    const c=document.createElement('canvas');c.width=40;c.height=40;
+    const cx=c.getContext('2d',{willReadFrequently:true});cx.drawImage(img,0,0,40,40);
+    const raw=cx.getImageData(0,0,40,40).data;
+    const counts={pink:0,red:0,orange:0,yellow:0,green:0,blue:0,purple:0};
+    let bright=0,low=0,high=0,colored=0,valid=0,edges=0;
+    const lum=[];
+    for(let i=0;i<raw.length;i+=4){
+     const r=raw[i]/255,g=raw[i+1]/255,b=raw[i+2]/255,a=raw[i+3];
+     if(a<100)continue;
+     const mx=Math.max(r,g,b),mn=Math.min(r,g,b),delta=mx-mn;
+     let h=0;
+     if(delta){ if(mx===r)h=(g-b)/delta%6;else if(mx===g)h=(b-r)/delta+2;else h=(r-g)/delta+4; h=(h*60+360)%360; }
+     const l=.2126*r+.7152*g+.0722*b;
+     lum.push(l);valid++;bright+=l;
+     if(l<.33)low++;if(l>.7)high++;
+     if(delta>.19&&mx>.22&&l<.96){
+      colored++;
+      const key=(h<16||h>=345)?'red':h<43?'orange':h<72?'yellow':h<168?'green':h<255?'blue':h<305?'purple': 'pink';
+      counts[key]++;
+     }
+    }
+    if(valid<40){resolve(null);return}
+    const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    const jp={pink:'ピンク',red:'赤',orange:'オレンジ',yellow:'黄色',green:'緑',blue:'青',purple:'紫'};
+    let color='色の重なり方';
+    if(colored/valid<.065)color='モノトーンに近い色使い';
+    else if(sorted[0][1]>colored*.25)color=jp[sorted[0][0]]+'を中心にした色使い';
+    const avg=bright/valid;
+    let contrast=(low/valid>.18&&high/valid>.18)?'明るい部分と暗い部分の対比':avg<.29?'暗さを生かした明暗':avg>.76?'明るさを前に出した表現':'明暗のつけ方';
+    // Edge-density is used for an abstract composition hint; it does not identify objects.
+    for(let y=1;y<39;y++)for(let x=1;x<39;x++){
+      const at=y*40+x;
+      if(Math.abs(lum[at]-lum[at+1])>.21||Math.abs(lum[at]-lum[at+40])>.21)edges++;
+    }
+    const composition=edges>300?'細かな要素の重なり':edges<60?'大きな面の取り方':'画面の配置';
+    resolve({color,contrast,composition});
+   }catch(e){resolve(null)}
+  };
+  img.onerror=()=>{clearTimeout(timeout);resolve(null)};
+  img.src=imageUrl;
+ });
+ visualPromiseCache.set(imageUrl,promise);return promise;
+}
+let artVisualBatch=0;
+async function refreshArtColors(){
+ const batch=++artVisualBatch;
+ const current=works.slice(0,16);
+ const found=await Promise.all(current.map(async w=>({id:w.id,visual:await analyzeImagePalette(w.image)})));
+ if(batch!==artVisualBatch)return;
+ let changed=false;
+ for(const f of found){
+  if(!f.visual)continue;
+  const w=works.find(x=>x.id===f.id);if(!w)continue;
+  w.visual=f.visual;w.commentContext=null;changed=true;
+ }
+ if(changed){lastTickSlot=null;render();}
+}
+
 
 const SCOUT_LINES=[
  'ちょっと待って。これ、業界に持っていきたい。何業界かは今から決めるけど。',
@@ -112,12 +591,12 @@ function seedComments(w){
   const born=w.created;
   return [0,1,2].map((_,i)=>{
     const p=PEOPLE[(hash(w.id)+i*7)%PEOPLE.length];
-    return {name:p.name,face:p.face,role:p.role,text:pick(p.lines,hash(w.title)+i),at:born+i*1000,fictional:true};
+    return {name:p.name,face:p.face,role:p.role,text:voiceComment(w,p,'first:'+i,w.commentUsed),at:born+i*1000,fictional:true};
   });
 }
 function rebuildVisitors(now=Date.now()){
   const ordered=works.slice().sort((a,b)=>a.created-b.created||a.id.localeCompare(b.id));
-  for(const w of works){w.visitorComments=seedComments(w);w.visitorCount=3;}
+  for(const w of works){w.commentUsed=new Set();w.commentContext=artContext(w);w.visitorComments=seedComments(w);w.visitorCount=3;}
   if(!ordered.length)return null;
   const endSlot=Math.floor(now/VISIT_INTERVAL_MS);
   const firstSlot=Math.floor(ordered[0].created/VISIT_INTERVAL_MS)+1;
@@ -133,10 +612,10 @@ function rebuildVisitors(now=Date.now()){
     const scout=hash('surprise-scout:'+slot)%29===0;
     let p=scout&&terry?terry:PEOPLE[index];
     if(!scout&&p.name==='テリー片桐')p=PEOPLE[(index+1)%PEOPLE.length];
-    const sentence=scout?pick(SCOUT_LINES,hash(target.id+':'+slot)):pick(p.lines,hash(target.id+':'+slot));
+    const sentence=voiceComment(target,p,'arrival:'+slot,target.commentUsed);
     target.visitorCount++;
     target.visitorComments.push({name:p.name,role:p.role,face:p.face,text:sentence,at:when,fictional:true,scout});
-    if(target.visitorComments.length>MAX_RECENT_FICTIONAL)target.visitorComments.shift();
+    if(target.visitorComments.length>MAX_RECENT_FICTIONAL){const removed=target.visitorComments.shift();target.commentUsed.delete(removed.text)}
     latest={work:target,slot,scout,at:when};
   }
   for(const w of works){
