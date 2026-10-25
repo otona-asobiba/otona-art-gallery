@@ -14,7 +14,17 @@ body{background:#f5f0e7;background-image:radial-gradient(#947b5b14 .7px,transpar
 .comment .face{overflow:hidden;border-radius:4px}
 .visitor b{font-size:14px}.visitor small{font-size:11px;line-height:1.5;display:block;margin-top:3px}
 @media(max-width:500px){.visitor{flex-basis:130px}.visitor .face{width:90px;height:90px}header .top{align-items:flex-start}}
-</style><meta name="gallery-build" content="all-29-portraits-fixed-20261024"></head><body><header><div class="top"><div><p>大人の遊び場 presents</p><h1>襟足のダンス</h1><p>スタバのお姉さんお客さんで来てる時はわりきってる</p></div><div class="stamp">NO GENIUS.<br><b>NO RULES.</b></div></div></header><main class="wrap"><section class="eventbar"><div><div class="eyebrow">CURRENT EXHIBITION · 大人の遊び場</div><h2 id="eventName">展覧会名を設定してください</h2><p id="eventTheme">テーマを設定してください</p><p id="eventPeriod" class="small"></p></div><div class="event-actions"><button class="btn secondary" id="editEvent">⚙ 展覧会を設定</button><button class="btn ghost" id="openTicket">🎟 入場チケット</button></div></section><section class="intro"><div><h2>本日の展示作品 <span id="count" class="pill">0点</span></h2><p>あなたの作品を飾ろう。やたら語るおっさんも、買い物帰りのオバハンも、勝手にやってくる。</p></div><button class="btn" id="openUpload">＋ 作品を展示する</button></section><section id="gallery" class="gallery"></section><section class="side"><h2>本日の勝手な鑑賞者たち</h2><p class="small">買い物帰りの人も、妙に語りたがる人も、なぜかここに集まってくる。</p><div class="visitor-list" id="visitors"></div><div class="notice">🎭 <b>この展示室は体験版です。</b> 作品とコメントはこの端末のブラウザ内に保存されます。他の参加者と作品を共有するには、公開用データベースの接続が必要です。来館者のコメントはキャラクター別の自動生成演出で、実際のAI画像鑑定ではありません。約10分ごとに来館記録が増えます（再訪時に経過時間を反映）。</div></section></main>
+
+/* Shared audience comments (v8) */
+.visitor-write{margin-top:25px;padding:22px 18px;border-top:2px solid #cbbba6;background:#fffaf2}
+.visitor-write h3{margin:0 0 8px}
+.visitor-write form{display:grid;gap:9px;margin-top:16px}
+.visitor-write label{font-size:13px;font-weight:700}
+.visitor-write input,.visitor-write textarea{display:block;width:100%;padding:12px 13px;border:1px solid #baad9b;border-radius:6px;background:white;color:#27221d;font:inherit;min-width:0}
+.visitor-write button{margin-top:8px;justify-self:start}
+.visitor-write button:disabled{opacity:.55;cursor:not-allowed}
+.visitor-write .small{line-height:1.65}
+</style><meta name="gallery-build" content="all-29-portraits-fixed-20261024"></head><body><header><div class="top"><div><p>大人の遊び場 presents</p><h1>襟足のダンス</h1><p>スタバのお姉さんお客さんで来てる時はわりきってる</p></div><div class="stamp">NO GENIUS.<br><b>NO RULES.</b></div></div></header><main class="wrap"><section class="eventbar"><div><div class="eyebrow">CURRENT EXHIBITION · 大人の遊び場</div><h2 id="eventName">展覧会名を設定してください</h2><p id="eventTheme">テーマを設定してください</p><p id="eventPeriod" class="small"></p></div><div class="event-actions"><button class="btn secondary" id="editEvent">⚙ 展覧会を設定</button><button class="btn ghost" id="openTicket">🎟 入場チケット</button></div></section><section class="intro"><div><h2>本日の展示作品 <span id="count" class="pill">0点</span></h2><p>あなたの作品を飾ろう。やたら語るおっさんも、買い物帰りのオバハンも、勝手にやってくる。</p></div><button class="btn" id="openUpload">＋ 作品を展示する</button></section><section id="gallery" class="gallery"></section><section class="side"><h2>本日の勝手な鑑賞者たち</h2><p class="small">買い物帰りの人も、妙に語りたがる人も、なぜかここに集まってくる。</p><div class="visitor-list" id="visitors"></div><div class="notice">🎭 <b>みんなの共同展示室。</b> 作品は全員で共有されています。架空の来館者は10分ごとに自動で現れ、いつ誰が来るかはお楽しみ。テリー片桐のスカウトも予告なしのフィクションイベントです。実際のAI作品審査や業界からの勧誘ではありません。参加者自身も作品へコメントできます。</div></section></main>
 <dialog id="uploadDialog"><div class="modal-head"><h2>作品を展示する</h2><button class="x" data-close="uploadDialog" aria-label="閉じる">×</button></div><div class="modal-body"><div class="field"><label>作品画像</label><div class="upload" id="uploadZone">🖼️<br>ここをタップして画像を選択<br><small>JPEG / PNG / WebP</small><img id="uploadPreview" alt="作品プレビュー"></div><input id="file" type="file" accept="image/*" hidden></div><div class="field"><label for="title">作品名</label><input id="title" maxlength="45" placeholder="例：ザビエル、富士山に立つ"></div><div class="field"><label for="artist">作者名（ニックネーム）</label><input id="artist" maxlength="30" placeholder="例：けんいち"></div><div class="field"><label for="desc">作品のひとこと（任意）</label><textarea id="desc" maxlength="200" placeholder="制作秘話、見どころなど"></textarea></div><button class="btn" id="submitWork">美術館に展示する</button><p class="small">投稿画像は共有展示室に保存され、URLを知る全員に公開されます。</p></div></dialog>
 <dialog id="detailDialog"><div class="modal-head"><h2>作品鑑賞室</h2><button class="x" data-close="detailDialog" aria-label="閉じる">×</button></div><div class="modal-body" id="detailBody"></div></dialog>
 
@@ -26,8 +36,47 @@ function faceHTML(name,emoji){return PORTRAITS[name]?'<img src="'+PORTRAITS[name
 const KEY='asobiba_gallery_v1';const PEOPLE=[{"name":"三田村","role":"現代アート評論家","face":"🧐","lines":["ああ、なるほど。これは説明しないほうがいい作品ですね。私には伝わりました。","この余白をどう受け取るかで、その人の今がわかりますね。","ここはあえて、私の感想は伏せておきます。"]},{"name":"KENZO","role":"自称・世界的プロデューサー","face":"🕶️","lines":["これ、ロンドンの知り合いに見せたいな。まあ、向こうの感覚だとどうかな。","こういうの、ベルリンでは普通に評価されますよ。たぶん。","ちょっと今、海外の案件が立て込んでてね。作品は見てますよ。"]},{"name":"野口","role":"写真歴40年","face":"📷","lines":["私も昔こういうの撮ったことあります。フィルムの時代ですけどね。","今は便利になりましたな。昔は一枚撮るにもね。","光の感じがいいですね。写真じゃない？ そうでしたか。"]},{"name":"京子","role":"商店街のオバハン","face":"👵","lines":["これ、ええなあ。玄関に飾ったら明るなるんちゃう？ うちは置くとこないけど。","帰りに豆腐買うの忘れんようにせな。あ、これ好きやで。","あら、かわいらしい。ほな、スーパー寄って帰るわ。"]},{"name":"月岡","role":"詩人","face":"🥀","lines":["今日は火曜日の色をしていますね。木曜日だったら、私はここに立てなかったと思う。","この作品には、まだ名前をつけていない午後が流れています。","わたしの左肩だけが、先に春を知っていました。"]},{"name":"田所","role":"元経理部長","face":"🧮","lines":["これは額縁込みの評価なんでしょうかね。そこだけ気になりまして。","展示番号があると、個人的には安心します。","私は感性より先に、管理方法が気になる性分でして。"]},{"name":"片桐","role":"自称・ピカソの理解者","face":"🎨","lines":["ピカソもね、たぶん最初はこういう気持ちだったと思うんですよ。知らんけど。","私がパリにいたときの空気を少し思い出します。空港ですけど。","こういう作品を見ると、ついピカソの話になってしまう。"]},{"name":"坂本","role":"工務店社長","face":"🔨","lines":["これ、壁に掛けるなら下地だけ確認しときたいな。","額の角、きれいに揃ってるなあ。そこが気になるねん。","ええ感じやん。照明つけたらもっと映えそうや。"]},{"name":"白鳥","role":"元学芸員","face":"👓","lines":["興味深いですね。個人的には、展示順にも関心があります。","この作品は、鑑賞者の立ち位置が大切かもしれません。","いろいろお話ししたいですが、今日は鑑賞に徹します。"]},{"name":"福本","role":"近所のおっさん","face":"🧓","lines":["これ、昨日と場所変わった？","ここの椅子、座ってええの？","ほう。今日はこれ見て帰ろ。"]},{"name":"黒川","role":"難解な評論家","face":"🎩","lines":["解釈をひとつに固定しない。そこに私は可能性を感じます。","この作品を語るには、まだ少し時代が早いかもしれません。","私はいま、あえて何も言わないという鑑賞をしています。"]},{"name":"節子","role":"買い物帰りのオバハン","face":"🛍️","lines":["あら、これええやん。なんか知らんけど、うちの姉ちゃん好きそうやわ。","今日キャベツ安かってん。あ、これ色きれいやな。","なんや楽しそうやなあ。これ、誰が作りはったん？"]},{"name":"大門","role":"謎の投資家","face":"💼","lines":["こういうの、将来的に何か展開できそうですね。具体的にはまだですが。","これを見て、少し市場のことを考えてしまいました。職業病ですね。","今すぐ何かするという話ではないんですが、可能性は感じます。"]},{"name":"福田","role":"居酒屋の大将","face":"🍶","lines":["ええやん。うちの店にもこういうの欲しいわ。","これ見てたら、ちょっと一杯やりたなるな。","難しいことはわからんけど、色がええね。"]},{"name":"博士","role":"自称・文化人類学者","face":"🧑‍🏫","lines":["この並び、どこか儀礼的ですね。何の儀礼かは今から考えます。","人類は昔から、こういうことをしてきたような気もします。","これは文化の入口なのか、出口なのか。興味深い。"]},{"name":"森田","role":"無口な警備員","face":"👮","lines":["……好きです。","……今日は、これを見に来ました。","……さっきの人、また来てます。"]},{"name":"長谷川","role":"やたら感動するおじいさん","face":"🥹","lines":["いやあ、なんかいいですねえ。","こういうものを見られる日が来るとはねえ。","ありがとうございます。いや、何に対してかはわからんのですが。"]},{"name":"宮本","role":"何でも暗号にするおっさん","face":"🛸","lines":["この配置、何かの合図にも見えますね。まあ偶然でしょうけど。","数字にすると面白いかもしれません。何の数字かはこれからです。","私にはひとつ気づいたことがありますが、今は黙っておきます。"]},{"name":"宇田川","role":"概念収集家・職業不明","face":"🌀","lines":["この作品は、まだ作品になろうとしていないところが、すでに作品なんですよね。","これは少し湿度がありますね。気象の話ではなく。","入口が出口のふりをしている感じ、ありますよね。"]}] ;
 PEOPLE.push(...[{"name":"節子","role":"カフェ店員","face":"☕","lines":["かわいい！意味とかよく分からないけど好きです。","これ、店の隅にあったらちょっと見ちゃいますね。"]},{"name":"横山","role":"会社員","face":"🥱","lines":["何がいいのかわからんけど、見ちゃうんだよなあ。","こういうの、昼休みに見るとちょうどいいですね。"]},{"name":"あや","role":"大学生","face":"🎧","lines":["エモい！なんか分かる気がする。","これスマホの待ち受けにしたいかも。"]},{"name":"平野","role":"元教師","face":"📚","lines":["こういうのは教育に必要だと思う。たぶん。","答えがないという答えもあるんですよね。"]},{"name":"木下","role":"旅人","face":"🧢","lines":["富士山がいいね。やっぱり旅に出たくなるよ。","これ見てたら知らない駅で降りたくなった。"]},{"name":"チェコ","role":"主婦","face":"🍱","lines":["家に飾ったら旦那に怒られそう。でも好き。","この色、うちの台所にちょうどいいわ。"]},{"name":"リョウタ","role":"フリーター","face":"🧥","lines":["よく分からんけどかっこいいっす。","なんか刺激もらえた。何の刺激かは分からないけど。"]},{"name":"タカシ","role":"サウナ好き","face":"♨️","lines":["ととのった。意味はない。でもいい。","この作品、サウナ上がりに見るとまた違うと思う。"]},{"name":"米酢健二","role":"シンガーソングライター","face":"🎸","lines":["世界が少しだけ裏返っている。僕にはそう見えるんです。","これは言葉にすると消えてしまう種類の夕方ですね。","音楽で言うと、サビの直前にある沈黙です。"]},{"name":"テリー片桐","role":"なんでも業界にスカウトする人","face":"🕶️","lines":["君、ちょっと業界に興味ない？一回だけ話そうよ。","これ、テレビの人に見せたいな。僕から話しとくよ。","才能あるよ。何の才能かは、これから決めよう。"]},{"name":"ケニー・ザ・サンシャイン","role":"チケット割引交渉人（自称）","face":"🎟️","lines":["いい展示ですね。で、入場料ってもうちょっと何とかなりません？","次回来たら常連割引ってありますか？","僕が三人連れてきたら、僕の分は無料ですよね？"]}]);
 for(let i=PEOPLE.length-1;i>=0;i--){if(PEOPLE.findIndex(p=>p.name===PEOPLE[i].name)!==i)PEOPLE.splice(i,1)}
-let works=[];const SUPA_URL='https://kqvwdnhspultoxpofwaf.supabase.co',SUPA_KEY='sb_publishable_jDJukrApDGatDCPPX5F7ew_ZOzTmegy';const supaHeaders={'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
-async function loadSharedWorks(){try{const r=await fetch(SUPA_URL+'/rest/v1/artworks?select=*&order=created_at.desc&limit=200',{headers:supaHeaders});if(!r.ok)throw Error(await r.text());const rows=await r.json();works=rows.map(a=>{const w={id:a.id,title:a.title,artist:a.artist_name,desc:a.description||'',image:a.image_url,created:Date.parse(a.created_at),comments:[],lastVisit:Date.parse(a.created_at)};seedComments(w);return w});render();document.getElementById('sharedStatus').textContent='共有展示室に接続中 · '+works.length+'作品';}catch(e){document.getElementById('sharedStatus').textContent='共有作品を読み込めません。通信状況をご確認ください';console.error(e)}}
+let works=[];
+const SUPA_URL='https://kqvwdnhspultoxpofwaf.supabase.co';
+const SUPA_KEY='sb_publishable_jDJukrApDGatDCPPX5F7ew_ZOzTmegy';
+const supaHeaders={'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
+let humanCommentsReady=false;
+let humanCommentsError='';
+const GUEST_NAME_KEY='asobiba_gallery_guest_name_v1';
+const COMMENT_COOLDOWN_KEY='asobiba_gallery_comment_cooldown_v1';
+async function loadSharedWorks(){
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/artworks?select=*&order=created_at.desc&limit=200',{headers:supaHeaders});
+    if(!r.ok)throw Error(await r.text());
+    const rows=await r.json();
+    works=rows.map(a=>({id:String(a.id),title:a.title,artist:a.artist_name,desc:a.description||'',image:a.image_url,created:Date.parse(a.created_at)||Date.now(),humanComments:[],comments:[],totalComments:0}));
+    humanCommentsReady=false;
+    humanCommentsError='';
+    if(works.length){
+      try{
+        const c=await fetch(SUPA_URL+'/rest/v1/artwork_comments?select=artwork_id,display_name,body,created_at&order=created_at.desc&limit=5000',{headers:supaHeaders});
+        if(!c.ok)throw Error('HTTP '+c.status);
+        const rows=await c.json();
+        const byWork=new Map(works.map(w=>[w.id,w]));
+        for(const item of rows){
+          const target=byWork.get(String(item.artwork_id));
+          if(target)target.humanComments.push({name:item.display_name,role:'参加者のコメント',face:'💬',text:item.body,at:Date.parse(item.created_at)||Date.now(),human:true});
+        }
+        humanCommentsReady=true;
+      }catch(e){
+        humanCommentsError='コメント共有用の設定がまだ完了していません。管理者がSQL設定を行うと投稿できるようになります。';
+        console.warn('Human comments table not ready:',e);
+      }
+    }else{
+      humanCommentsReady=true;
+    }
+    render();
+    document.getElementById('sharedStatus').textContent='共有展示室に接続中 · '+works.length+'作品 · 10分ごとに来館';
+  }catch(e){
+    document.getElementById('sharedStatus').textContent='共有作品を読み込めません。通信状況をご確認ください';
+    console.error(e);
+  }
+}
 let imageData='';const $=id=>document.getElementById(id);const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const pick=(arr,seed)=>arr[Math.abs(seed)%arr.length];const hash=s=>{let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h)};const store=()=>true;
 
 const SCOUT_LINES=[
@@ -50,10 +99,125 @@ function showScout(w,manual=false){
  if(manual){w.comments.push({name:terry.name,face:terry.face,role:terry.role,text:pick(SCOUT_LINES,Math.floor(Math.random()*100)),at:Date.now()});w.comments=w.comments.slice(-100);store();render()}
  d.showModal();
 }
-function seedComments(w){const now=Date.now();w.comments=[0,1,2].map((_,i)=>{const p=PEOPLE[(hash(w.id)+i*7)%PEOPLE.length];return {name:p.name,face:p.face,role:p.role,text:pick(p.lines,hash(w.title)+i),at:now-i*60000}}).reverse();w.lastVisit=now}
-function tick(){let changed=false;let scoutWork=null;const now=Date.now();for(const w of works){if(!w.comments){seedComments(w);changed=true}const elapsed=Math.floor((now-(w.lastVisit||now))/600000);if(elapsed>0){for(let i=0;i<Math.min(elapsed,432);i++){const idx=(w.comments.length+hash(w.id))%PEOPLE.length;const candidate=PEOPLE[idx];const isScout=((w.comments.length+hash(w.id)+i)%8===0);const p=isScout?(PEOPLE.find(x=>x.name==='テリー片桐')||candidate):candidate;let line=isScout?pick(SCOUT_LINES,hash(w.id)+w.comments.length+i):pick(p.lines,hash(w.id)+w.comments.length+i);if(w.comments.length>2&&w.comments.length%5===0){const prev=w.comments[w.comments.length-1];line=pick([`さっき${prev.name}さんが来てましたね。${line}`,`${prev.name}さんの話を聞いていたら、なんだか気になって。${line}`,`あ、${prev.name}さんもこの作品を見てたんですね。${line}`],w.comments.length)}w.comments.push({name:p.name,role:p.role,face:p.face,text:line,at:(w.lastVisit||now)+(i+1)*600000});if(isScout)scoutWork=w}w.comments=w.comments.slice(-100);w.lastVisit=(w.lastVisit||now)+elapsed*600000;changed=true}}if(changed)store();if(scoutWork&&!document.hidden&&!document.getElementById('scoutNotice')){const n=document.createElement('div');n.id='scoutNotice';n.style.cssText='position:fixed;bottom:16px;right:16px;z-index:50;background:#fff7e6;border:2px solid #8a573a;box-shadow:0 8px 24px #0003;padding:16px;max-width:300px;border-radius:6px';n.innerHTML='<b>🎬 テリー片桐が来館！</b><p>作品を業界にスカウトしたいそうです。</p><button class="btn" id="scoutOpen">話を聞く</button> <button class="btn secondary" id="scoutDismiss">あとで</button>';document.body.appendChild(n);n.querySelector('#scoutOpen').onclick=()=>{n.remove();showScout(scoutWork)};n.querySelector('#scoutDismiss').onclick=()=>n.remove()}}
-function render(){tick();$('count').textContent=works.length+'点';$('visitors').innerHTML=PEOPLE.map(p=>`<div class="visitor"><div class="face">${faceHTML(p.name,p.face)}</div><b>${esc(p.name)}</b><small>${esc(p.role)}</small></div>`).join('');$('gallery').innerHTML=works.length?works.slice().reverse().map(w=>`<article class="work" data-id="${esc(w.id)}" tabindex="0" role="button" aria-label="${esc(w.title)}を鑑賞"><div class="art"><img src="${w.image}" alt="${esc(w.title)}"></div><h3>${esc(w.title)}</h3><div class="meta">作：${esc(w.artist)} ／ 鑑賞コメント ${w.comments?.length||0}件</div><div class="preview">💬 ${esc(w.comments?.at(-1)?.text||'')}</div></article>`).join(''):'<div class="empty"><div class="emoji">🖼️</div><h3>まだ作品がありません</h3><p>最初の作品を展示して、鼻につく来館者を呼び込もう。</p><button class="btn" onclick="document.getElementById(\'uploadDialog\').showModal()">最初の作品を展示する</button></div>';document.querySelectorAll('.work').forEach(el=>{el.onclick=()=>showWork(el.dataset.id);el.onkeydown=e=>{if(e.key==='Enter')showWork(el.dataset.id)}})}
-function showWork(id){tick();const w=works.find(w=>w.id===id);if(!w)return;const comments=w.comments.slice().reverse();$('detailBody').innerHTML=`<div class="detail-art"><img src="${w.image}" alt="${esc(w.title)}"></div><div class="detail-meta"><h2>${esc(w.title)}</h2><p>作：${esc(w.artist)}</p>${w.desc?`<p class="small">${esc(w.desc)}</p>`:''}</div><h3>勝手に寄せられた感想 <span class="pill">${comments.length}件</span></h3><div class="comments">${comments.map(c=>`<div class="comment"><div class="face">${faceHTML(c.name,c.face)}</div><div class="bubble"><strong>${esc(c.name)}</strong><span class="small">${esc(c.role)}</span><time>${new Date(c.at).toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}</time><p>${esc(c.text)}</p></div></div>`).join('')}</div><div class="actions"><button class="btn secondary" id="guestNow">🎭 誰かが突然来館する</button><button class="btn secondary" id="scoutNow">🎬 テリー片桐のスカウト</button></div><p class="small">通常の来館は約10分ごと。体験版ではボタンで追加の来館を試せます。</p>`;if(!$('detailDialog').open)$('detailDialog').showModal();$('guestNow').onclick=()=>{const p=PEOPLE[Math.floor(Math.random()*PEOPLE.length)];w.comments.push({name:p.name,face:p.face,role:p.role,text:pick(p.lines,Math.floor(Math.random()*100)),at:Date.now()});store();render();showWork(id)};$('scoutNow').onclick=()=>showScout(w,true);}
+// One fictional arrival per 10-minute slot across the entire exhibition.
+// Every device reconstructs the *same* visitors from artwork creation times.
+// This runs on elapsed wall-clock time, not how long a page has been open.
+const VISIT_INTERVAL_MS=10*60*1000;
+const MAX_VISIT_SLOTS=50000;
+const MAX_RECENT_FICTIONAL=120;
+let lastTickSlot=null;
+let lastArrival=null;
+let activeWorkId=null;
+function seedComments(w){
+  const born=w.created;
+  return [0,1,2].map((_,i)=>{
+    const p=PEOPLE[(hash(w.id)+i*7)%PEOPLE.length];
+    return {name:p.name,face:p.face,role:p.role,text:pick(p.lines,hash(w.title)+i),at:born+i*1000,fictional:true};
+  });
+}
+function rebuildVisitors(now=Date.now()){
+  const ordered=works.slice().sort((a,b)=>a.created-b.created||a.id.localeCompare(b.id));
+  for(const w of works){w.visitorComments=seedComments(w);w.visitorCount=3;}
+  if(!ordered.length)return null;
+  const endSlot=Math.floor(now/VISIT_INTERVAL_MS);
+  const firstSlot=Math.floor(ordered[0].created/VISIT_INTERVAL_MS)+1;
+  const startSlot=Math.max(firstSlot,endSlot-MAX_VISIT_SLOTS+1);
+  let eligible=0,latest=null;
+  const terry=PEOPLE.find(x=>x.name==='テリー片桐');
+  for(let slot=startSlot;slot<=endSlot;slot++){
+    const when=slot*VISIT_INTERVAL_MS;
+    while(eligible<ordered.length&&ordered[eligible].created<=when)eligible++;
+    if(!eligible)continue;
+    const target=ordered[hash('artwork:'+slot)%eligible];
+    const index=hash('visitor:'+slot)%PEOPLE.length;
+    const scout=hash('surprise-scout:'+slot)%29===0;
+    let p=scout&&terry?terry:PEOPLE[index];
+    if(!scout&&p.name==='テリー片桐')p=PEOPLE[(index+1)%PEOPLE.length];
+    const sentence=scout?pick(SCOUT_LINES,hash(target.id+':'+slot)):pick(p.lines,hash(target.id+':'+slot));
+    target.visitorCount++;
+    target.visitorComments.push({name:p.name,role:p.role,face:p.face,text:sentence,at:when,fictional:true,scout});
+    if(target.visitorComments.length>MAX_RECENT_FICTIONAL)target.visitorComments.shift();
+    latest={work:target,slot,scout,at:when};
+  }
+  for(const w of works){
+    w.comments=w.visitorComments.concat(w.humanComments||[]).sort((a,b)=>a.at-b.at);
+    w.totalComments=w.visitorCount+(w.humanComments||[]).length;
+  }
+  return latest;
+}
+function showScoutNotice(work){
+  if(document.hidden||document.getElementById('scoutNotice'))return;
+  const n=document.createElement('div');
+  n.id='scoutNotice';
+  n.style.cssText='position:fixed;bottom:16px;right:16px;z-index:50;background:#fff7e6;border:2px solid #8a573a;box-shadow:0 8px 24px #0003;padding:16px;max-width:310px;border-radius:6px';
+  n.innerHTML='<b>🎬 テリー片桐、突然の来館！</b><p>「作品をちょっと業界に紹介したい」と言っています。</p><button class="btn" id="scoutOpen">スカウトの話を聞く</button> <button class="btn secondary" id="scoutDismiss">あとで</button>';
+  document.body.appendChild(n);
+  n.querySelector('#scoutOpen').onclick=()=>{n.remove();showScout(work,false)};
+  n.querySelector('#scoutDismiss').onclick=()=>n.remove();
+}
+function tick(){
+  const slot=Math.floor(Date.now()/VISIT_INTERVAL_MS);
+  if(lastTickSlot===slot&&works.every(w=>w.comments&&w.comments.length))return;
+  const previous=lastTickSlot;
+  lastArrival=rebuildVisitors();
+  lastTickSlot=slot;
+  if(previous!==null&&slot>previous&&lastArrival&&lastArrival.slot===slot&&lastArrival.scout){
+    showScoutNotice(lastArrival.work);
+  }
+}
+function render(){tick();$('count').textContent=works.length+'点';$('visitors').innerHTML=PEOPLE.map(p=>`<div class="visitor"><div class="face">${faceHTML(p.name,p.face)}</div><b>${esc(p.name)}</b><small>${esc(p.role)}</small></div>`).join('');$('gallery').innerHTML=works.length?works.slice().reverse().map(w=>`<article class="work" data-id="${esc(w.id)}" tabindex="0" role="button" aria-label="${esc(w.title)}を鑑賞"><div class="art"><img src="${esc(w.image)}" alt="${esc(w.title)}"></div><h3>${esc(w.title)}</h3><div class="meta">作：${esc(w.artist)} ／ 鑑賞コメント ${w.totalComments||0}件</div><div class="preview">💬 ${esc(w.comments?.at(-1)?.text||'')}</div></article>`).join(''):'<div class="empty"><div class="emoji">🖼️</div><h3>まだ作品がありません</h3><p>最初の作品を展示して、鼻につく来館者を呼び込もう。</p><button class="btn" onclick="document.getElementById(\'uploadDialog\').showModal()">最初の作品を展示する</button></div>';document.querySelectorAll('.work').forEach(el=>{el.onclick=()=>showWork(el.dataset.id);el.onkeydown=e=>{if(e.key==='Enter')showWork(el.dataset.id)}})}
+function showWork(id){
+  tick();
+  activeWorkId=id;
+  const w=works.find(w=>w.id===id);
+  if(!w)return;
+  const comments=w.comments.slice().reverse();
+  const message=humanCommentsReady?'':'<p class="small" style="color:#9b452d">'+esc(humanCommentsError||'共有コメントの読み込みができませんでした。')+'</p>';
+  let previousName='';
+  try{previousName=localStorage.getItem(GUEST_NAME_KEY)||''}catch(e){}
+  $('detailBody').innerHTML=`
+    <div class="detail-art"><img src="${esc(w.image)}" alt="${esc(w.title)}"></div>
+    <div class="detail-meta"><h2>${esc(w.title)}</h2><p>作：${esc(w.artist)}</p>${w.desc?`<p class="small">${esc(w.desc)}</p>`:''}</div>
+    <h3>みんなと来館者の感想 <span class="pill">${w.totalComments}件</span></h3>
+    <section class="visitor-write" aria-label="参加者のコメント投稿">
+      <h3>あなたも感想を残そう</h3>
+      <p class="small">このコメントはみんなの画面に表示されます。架空の来館者は10分ごとに自動でやってきます。</p>
+      <form id="humanCommentForm">
+        <label for="commenterName">表示名</label>
+        <input id="commenterName" maxlength="32" autocomplete="nickname" placeholder="お名前・ニックネーム" value="${esc(previousName)}" required>
+        <label for="commentText">この作品へのひと言</label>
+        <textarea id="commentText" maxlength="500" rows="3" placeholder="作品を見て思ったことをどうぞ" required></textarea>
+        <button class="btn" id="commentSend" type="submit" ${humanCommentsReady?'':'disabled'}>💬 コメントを投稿する</button>
+        <p class="small" id="commentStatus" role="status">${message||'※ コメントは公開されます。個人情報や攻撃的な投稿は控えてください。'}</p>
+      </form>
+    </section>
+    <h3 style="margin-top:24px">鑑賞コメント一覧</h3>
+    <div class="comments">${comments.map(c=>`<div class="comment"><div class="face">${c.human?'💬':faceHTML(c.name,c.face)}</div><div class="bubble"><strong>${esc(c.name)}</strong><span class="small">${esc(c.role)}</span><time>${new Date(c.at).toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}</time><p>${esc(c.text)}</p></div></div>`).join('')}</div>`;
+  if(!$('detailDialog').open)$('detailDialog').showModal();
+  $('humanCommentForm').onsubmit=e=>{e.preventDefault();submitHumanComment(id)};
+}
+async function submitHumanComment(id){
+  const name=$('commenterName').value.trim(),body=$('commentText').value.trim();
+  const status=$('commentStatus'),button=$('commentSend');
+  if(!humanCommentsReady){status.textContent='まだ投稿の準備ができていません。';return}
+  if(!name||!body||Array.from(name).length>32||Array.from(body).length>500){status.textContent='名前（32文字まで）と感想（500文字まで）を入力してください。';return}
+  const now=Date.now();
+  try{
+    const last=Number(localStorage.getItem(COMMENT_COOLDOWN_KEY)||0);
+    if(now-last<20000){status.textContent='連続投稿を防ぐため、少し経ってから投稿してください。';return}
+  }catch(e){}
+  button.disabled=true;button.textContent='投稿中…';status.textContent='コメントを共有しています…';
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/artwork_comments',{method:'POST',headers:{...supaHeaders,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({artwork_id:id,display_name:name,body})});
+    if(!r.ok)throw Error('HTTP '+r.status);
+    try{localStorage.setItem(GUEST_NAME_KEY,name);localStorage.setItem(COMMENT_COOLDOWN_KEY,String(now))}catch(e){}
+    status.textContent='投稿できました！';
+    await loadSharedWorks();
+    showWork(id);
+  }catch(e){
+    console.error(e);status.textContent='コメントを保存できませんでした。通信状況または共有設定を確認してください。';
+  }finally{if(button.isConnected){button.disabled=false;button.textContent='💬 コメントを投稿する'}}
+}
 $('openUpload').onclick=()=>$('uploadDialog').showModal();document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());$('uploadZone').onclick=()=>$('file').click();$('file').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const img=await createImageBitmap(file);const c=document.createElement('canvas');const scale=Math.min(1,1100/Math.max(img.width,img.height));c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext('2d').drawImage(img,0,0,c.width,c.height);imageData=c.toDataURL('image/jpeg',.76);$('uploadPreview').src=imageData;$('uploadPreview').style.display='block';img.close()}catch(e){alert('この画像を読み込めませんでした。JPEGかPNGで試してください。')}};$('submitWork').onclick=async()=>{const title=$('title').value.trim(),artist=$('artist').value.trim();if(!imageData||!title||!artist){alert('作品画像・作品名・作者名を入力してください。');return}const btn=$('submitWork');btn.disabled=true;btn.textContent='共有展示室に投稿中…';try{const blob=await(await fetch(imageData)).blob();if(blob.size>5*1024*1024)throw Error('画像が5MBを超えています');const path=crypto.randomUUID()+'.jpg';const up=await fetch(SUPA_URL+'/storage/v1/object/artworks/'+path,{method:'POST',headers:{...supaHeaders,'Content-Type':'image/jpeg','x-upsert':'false'},body:blob});if(!up.ok)throw Error('画像の保存に失敗: '+await up.text());const imageUrl=SUPA_URL+'/storage/v1/object/public/artworks/'+path;const saved=await fetch(SUPA_URL+'/rest/v1/artworks',{method:'POST',headers:{...supaHeaders,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify({title,artist_name:artist,description:$('desc').value.trim(),image_url:imageUrl})});if(!saved.ok)throw Error('作品情報の保存に失敗: '+await saved.text());$('uploadDialog').close();$('title').value='';$('artist').value='';$('desc').value='';$('file').value='';$('uploadPreview').style.display='none';imageData='';await loadSharedWorks();alert('作品を共有展示室に展示しました！');}catch(e){console.error(e);alert('投稿できませんでした。'+e.message)}finally{btn.disabled=false;btn.textContent='美術館に展示する'}};
 const EVENT_KEY='asobiba_gallery_event_v1';
 const DEFAULT_EVENT={name:'展覧会名を設定してください',theme:'テーマを設定してください',period:'',style:'classic'};
@@ -74,5 +238,20 @@ $('ticketStyle').onchange=v=>{eventCfg.style=$('ticketStyle').value;try{localSto
 function wrapCanvas(ctx,str,x,y,maxWidth,lineHeight,maxLines=3){let line='',lines=0;for(const ch of Array.from(str)){if(ctx.measureText(line+ch).width>maxWidth&&line){ctx.fillText(line,x,y+lines*lineHeight);lines++;line='';if(lines>=maxLines)return}line+=ch}if(line&&lines<maxLines)ctx.fillText(line,x,y+lines*lineHeight)}
 $('downloadTicket').onclick=()=>{const c=document.createElement('canvas');c.width=1200;c.height=630;const ctx=c.getContext('2d');const st=styles[eventCfg.style]||styles.classic;ctx.fillStyle=st.bg;ctx.fillRect(0,0,c.width,c.height);ctx.strokeStyle=st.fg;ctx.lineWidth=7;ctx.strokeRect(25,25,1150,580);ctx.globalAlpha=.5;ctx.setLineDash([12,12]);ctx.beginPath();ctx.moveTo(970,25);ctx.lineTo(970,605);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;ctx.fillStyle=st.fg;ctx.font='bold 26px sans-serif';ctx.fillText('OTONA NO ASOBIBA  ·  ADMISSION',75,110);ctx.font='bold 62px sans-serif';wrapCanvas(ctx,eventCfg.name,75,245,825,78,3);ctx.font='30px sans-serif';wrapCanvas(ctx,eventCfg.theme,75,460,825,42,2);ctx.font='23px sans-serif';ctx.fillText((eventCfg.period||'胡散臭い美術館')+'  ·  入場自由',75,565);ctx.save();ctx.translate(1080,320);ctx.rotate(Math.PI/2);ctx.font='bold 27px sans-serif';ctx.textAlign='center';ctx.fillText('GALLERY TICKET · 001',0,0);ctx.restore();const a=document.createElement('a');a.download='胡散臭い美術館_入場チケット.png';a.href=c.toDataURL('image/png');document.body.appendChild(a);a.click();a.remove()};
 renderEvent();
-render();loadSharedWorks();setInterval(()=>{loadSharedWorks()},60000);
+render();
+loadSharedWorks();
+setInterval(()=>{loadSharedWorks()},60000);
+setInterval(()=>{
+  const slot=Math.floor(Date.now()/VISIT_INTERVAL_MS);
+  if(slot!==lastTickSlot){
+    render();
+    const detail=$('detailDialog');
+    if(activeWorkId&&detail.open){
+      const previousScroll=detail.scrollTop;
+      showWork(activeWorkId);
+      detail.scrollTop=previousScroll;
+    }
+  }
+},10000);
+
 </script></body></html>
